@@ -1,0 +1,15 @@
+
+__pycache__/
+*.py[cod]
+venv/
+backend/venv/
+
+
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+android/.gradle
+ios/.symlinks
+
+.DS_Store

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Görev Listesi (Web View)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background:#ffffff; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h1 { text-align: center; color: #667eea; margin-bottom: 25px; font-size: 28px; }
+        .refresh-btn { display: block; width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px; transition: transform 0.2s, box-shadow 0.2s; }
+        .refresh-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        .refresh-btn:active { transform: translateY(0); }
+        ul { list-style-type: none; }
+        li { background: #f5f7fa; margin: 10px 0; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        li:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2); }
+        .empty-message { text-align: center; color: #999; padding: 40px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Güncel Görevler</h1>
+    <button class="refresh-btn" onclick="fetchTasks()">Listeyi Yenile</button>
+    <ul id="taskList">
+    </ul>
+</div>
+
+<script>
+    const API_URL = "http://localhost:5000/tasks";
+
+    async function fetchTasks() {
+        try {
+            const response = await fetch(API_URL);
+            const tasks = await response.json();
+            
+            const listElement = document.getElementById('taskList');
+            listElement.innerHTML = "";
+
+            if (tasks.length === 0) {
+                listElement.innerHTML = '<div class="empty-message">Henüz görev yok 📝</div>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = task.title;
+                listElement.appendChild(li);
+            });
+        } catch (error) {
+            console.error("Hata:", error);
+            alert("Sunucuya bağlanılamadı! Backend'in açık olduğundan emin olun.");
+        }
+    }
+
+    fetchTasks();
+</script>
+
+</body>
+</html>
